@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Партийный учёт — Добавить члена</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #1e3a5f;
+            --navy-dark: #162c47;
+            --navy-light: #2a4d78;
+            --red: #7a1f1f;
+            --red-accent: #8b1a1a;
+            --gold: #b8860b;
+            --bg: #f5f6f8;
+            --panel: #ffffff;
+            --text: #1a1a1a;
+            --muted: #4a5568;
+            --border: #d0d4da;
+            --border-light: #e0e4ea;
+            --ok: #2c7a3f;
+            --err: #a02020;
+        }
+
+        * { box-sizing: border-box; }
+
+        html, body { height: 100%; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-family: 'PT Sans', 'Segoe UI', Arial, sans-serif;
+            font-size: 15px;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--bg);
+        }
+
+        /* ── Шапка ───────────────────────────── */
+        header {
+            background: var(--red-accent);
+            color: #fff;
+            border-bottom: 4px solid var(--navy);
+        }
+
+        .header-inner {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+
+
+        .brand-name {
+            font-family: 'PT Serif', Georgia, serif;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+        }
+
+        .brand-sub {
+            font-size: 12px;
+            color: #c8d0dc;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+
+        .header-meta {
+            font-size: 12px;
+            color: #c8d0dc;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+        .brand-link {
+            position: relative;
+            display: inline-block;
+            height: 32px;
+        }
+        .flag {
+            height: 32px;
+            width: auto;
+            transition: opacity 0.2s;
+        }
+        .flag-hover {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+        }
+        .brand-link:hover .flag-normal { opacity: 0; }
+        .brand-link:hover .flag-hover  { opacity: 1; }
+
+        /* ── Контент ─────────────────────────── */
+        main {
+            flex: 1;
+            padding: 32px 16px 48px;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-family: 'PT Serif', Georgia, serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--navy);
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin: 0 0 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--muted);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 28px;
+        }
+
+        .subtitle::after {
+            content: "";
+            display: block;
+            width: 60px;
+            height: 2px;
+            background: var(--red-accent);
+            margin: 14px auto 0;
+        }
+
+        /* ── Форма ───────────────────────────── */
+        form {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-top: 3px solid var(--navy);
+            padding: 28px 32px 32px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        fieldset {
+            border: 1px solid var(--border-light);
+            border-left: 3px solid var(--red-accent);
+            margin: 0 0 22px;
+            padding: 14px 18px 18px;
+            background: #fafbfc;
+        }
+
+        legend {
+            font-family: 'PT Serif', Georgia, serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--navy);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 0 8px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0 16px;
+        }
+
+        .grid .full { grid-column: 1 / -1; }
+
+        label {
+            display: grid;
+            gap: 6px;
+            margin-bottom: 14px;
+            font-size: 12px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 700;
+        }
+
+        input {
+            padding: 9px 12px;
+            font-size: 15px;
+            font-family: inherit;
+            border: 1px solid #c8ccd4;
+            background: #fff;
+            color: var(--text);
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--navy);
+            box-shadow: 0 0 0 2px rgba(30,58,95,0.12);
+        }
+
+        input::placeholder {
+            color: #a8b0bc;
+        }
+
+        /* ── Кнопка ──────────────────────────── */
+        .actions {
+            margin-top: 8px;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px 24px;
+            font-size: 14px;
+            font-family: inherit;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            background: var(--navy);
+            color: #fff;
+            border: none;
+            border-bottom: 3px solid var(--red-accent);
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        button:hover { background: var(--navy-light); }
+        button:active { background: var(--navy-dark); }
+
+        /* ── Сообщение ───────────────────────── */
+        #msg {
+            max-width: 720px;
+            margin: 18px auto 0;
+            padding: 10px 16px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            border-radius: 2px;
+        }
+
+        #msg:empty { display: none; }
+        #msg.ok  { background: #e6f4ea; color: var(--ok); border: 1px solid #b7dfc2; }
+        #msg.err { background: #fce8e6; color: var(--err); border: 1px solid #f0b8b3; }
+
+        /* ── Подвал ──────────────────────────── */
+        footer {
+            background: var(--navy);
+            color: #c8d0dc;
+            border-top: 4px solid var(--red-accent);
+            text-align: center;
+            padding: 14px;
+            font-size: 12px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        /* ── Адаптив ─────────────────────────── */
+        @media (max-width: 560px) {
+            .grid { grid-template-columns: 1fr; }
+            form { padding: 20px 18px; }
+            .header-meta { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <div class="brand">
+            <a href="/" class="brand-link" aria-label="На главную">
+                <img src="/static/KPRF_Logo-white.svg" class="flag flag-normal" alt="">
+                <img src="/static/KPRF_Logo-gold.svg" class="flag flag-hover" alt="">
+            </a>
+            <div>
+                <div class="brand-name">Партийный учёт</div>
+                <div class="brand-sub">Единый реестр членов</div>
+            </div>
+        </div>
+        <div class="header-meta">Официальный портал</div>
+    </div>
+</header>
+
+<main>
+    <div class="container">
+        <h1>Добавить члена партии</h1>
+        <p class="subtitle">Заполните все обязательные поля</p>
+
+        <form id="member-form">
+            <fieldset>
+                <legend>Партбилет</legend>
+                <label>Номер партбилета
+                    <input name="party_card_number" required placeholder="например, 3000Б">
+                </label>
+            </fieldset>
+
+            <fieldset>
+                <legend>ФИО</legend>
+                <div class="grid">
+                    <label>Фамилия <input name="last_name" required></label>
+                    <label>Имя <input name="first_name" required></label>
+                    <label class="full">Отчество <input name="father_name"></label>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Вступление в партию</legend>
+                <div class="grid">
+                    <label>Месяц <input name="month" type="number" min="1" max="12" placeholder="1–12" required></label>
+                    <label>Год <input name="year" type="number" min="1900" max="2100" placeholder="2026" required></label>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Комитет</legend>
+                <div class="grid">
+                    <label>Региональный <input name="regional_committee" required></label>
+                    <label>Районный <input name="district_committee" required></label>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Личные данные</legend>
+                <div class="grid">
+                    <label>Дата рождения <input name="birth_date" type="date" required></label>
+                    <label>Профессия <input name="profession" required></label>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Адрес проживания</legend>
+                <div class="grid">
+                    <label class="full">Город <input name="city" required></label>
+                    <label class="full">Улица <input name="street" required></label>
+                    <label>Дом <input name="house" type="number" min="1" required></label>
+                    <label>Строение <input name="building"></label>
+                </div>
+            </fieldset>
+
+            <div class="actions">
+                <button type="submit">Внести в реестр</button>
+            </div>
+        </form>
+
+        <p id="msg"></p>
+    </div>
+</main>
+
+<footer>
+    © 2026 Партийный учёт · Все права защищены
+</footer>
+
+<script>
+    document.getElementById('member-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const d = new FormData(e.target);
+        const msg = document.getElementById('msg');
+
+        const payload = {
+            party_card_number: d.get('party_card_number'),
+            name: {
+                last_name:   d.get('last_name'),
+                first_name:  d.get('first_name'),
+                father_name: d.get('father_name'),
+            },
+            joining_date: {
+                month: Number(d.get('month')) || 0,
+                year:  Number(d.get('year'))  || 0,
+            },
+            committee: {
+                regional_committee: d.get('regional_committee'),
+                district_committee: d.get('district_committee'),
+            },
+            birth_date: d.get('birth_date')
+                ? d.get('birth_date') + 'T00:00:00Z'
+                : '0001-01-01T00:00:00Z',
+            profession: d.get('profession'),
+            address: {
+                city:     d.get('city'),
+                street:   d.get('street'),
+                house:    Number(d.get('house')) || 0,
+                building: d.get('building'),
+            },
+        };
+
+        try {
+            const r = await fetch('/members', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(payload),
+            });
+
+            msg.className = r.ok ? 'ok' : 'err';
+            msg.textContent = r.ok ? 'Запись внесена в реестр' : 'Ошибка при сохранении';
+            if (r.ok) e.target.reset();
+        } catch (err) {
+            msg.className = 'err';
+            msg.textContent = 'Сервер недоступен';
+        }
+    });
+</script>
+</body>
+</html>
