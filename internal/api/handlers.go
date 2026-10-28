@@ -131,7 +131,7 @@ func createTable(db *sql.DB) error {
 			                                            REFERENCES %s.district_committees(id) ON DELETE RESTRICT,
 			    UNIQUE (district_committee_id, name)
 			)
-`, appSchema)
+`, appSchema, appSchema)
 
 	if _, err := db.Exec(primary); err != nil {
 		return fmt.Errorf("failed to create primary_units: %w", err)
