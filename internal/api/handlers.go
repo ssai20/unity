@@ -17,6 +17,7 @@ func (s *Server) SetupRouters() *http.ServeMux {
 	router := http.NewServeMux()
 	router.HandleFunc("/members", s.handleMembers)
 	router.HandleFunc("/", s.index)
+	router.HandleFunc("/get-members", s.getMembers)
 
 	router.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("web"))))
 	return router
@@ -164,6 +165,36 @@ func createTable(db *sql.DB) error {
 	log.Printf("Table %s.members,  %s.regional_committees, %s.district_committees, %s.primary_units are ready",
 		appSchema, appSchema, appSchema, appSchema)
 	return nil
+}
+
+func (s *Server) getMembers(w http.ResponseWriter, r *http.Request) {
+	if s.db == nil {
+		http.Error(w, "Database connection not allowed", http.StatusBadRequest)
+		return
+	}
+
+	query := fmt.Sprintf(`SELECT first_name, father_name, last_name FROM %s.members`, appSchema)
+	rows, err := s.db.Query(query)
+	if err != nil {
+		http.Error(w, "bad query", http.StatusBadRequest)
+	}
+	defer rows.Close()
+
+	var members []models.FIO
+	for rows.Next() {
+		var m models.FIO
+		if err := rows.Scan(&m.FirstName, &m.FatherName, &m.LastName); err != nil {
+			http.Error(w, "members can't allowed", http.StatusBadRequest)
+		}
+		members = append(members, m)
+	}
+	if err := rows.Err(); err != nil {
+		http.Error(w, "rows error", http.StatusBadRequest)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(members)
+
 }
 
 func (s *Server) saveMember(w http.ResponseWriter, r *http.Request) {
