@@ -1,26 +1,19 @@
 services:
   app:
+  
     build: .
     ports:
       - "8086:8086"
-    environment:              # ← теперь внутри app
-      - PORT=8086
-      - DB_HOST=db
-      - DB_PORT=5432
-      - DB_USER=myuser
-      - DB_PASSWORD=mypassword
-      - DB_NAME=mydatabase
-      - DB_SSLMODE=disable
+    env_file:
+     - .env.local
     depends_on:
       db:
         condition: service_healthy
 
   db:                         # ← теперь внутри services
     image: postgres:16-alpine
-    environment:
-      - POSTGRES_USER=myuser
-      - POSTGRES_PASSWORD=mypassword
-      - POSTGRES_DB=mydatabase
+    env_file:
+      - .env.local
     ports:
       - "5432:5432"
     volumes:
